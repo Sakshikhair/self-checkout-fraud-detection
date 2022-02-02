@@ -52,6 +52,7 @@ def add_user():
     session['user_id']=myuser[0][0]
     return redirect('/home')
 
+#logout
 @app.route("/logout")
 def logout():
     session.pop('user_id')
