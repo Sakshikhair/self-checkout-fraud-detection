@@ -5,7 +5,11 @@ import os
 app = Flask(__name__)
 app.secret_key=os.urandom(24)
 
-conn = mysql.connector.connect(host="127.0.0.1", user="root", passwd="@sakshiI23", db="typroject")
+# <<<<<<< new_branch
+conn = mysql.connector.connect(host="127.0.0.1", user="root", passwd="Qwerty@13", db="typroject")
+# =======
+# conn = mysql.connector.connect(host="127.0.0.1", user="root", passwd="@sakshiI23", db="typroject")
+# >>>>>>> main
 mycursor = conn.cursor()
 
 @app.route("/")
@@ -48,7 +52,11 @@ def add_user():
     mycursor.execute("""INSERT INTO `selfcheckout` (`user_id`, `name`, `email`, `password`) VALUES (NULL, `{}`, `{}`, `{}`).format(user_id, name, email, password)""")
     conn.commit()
     mycursor.execute("""SELECT * FROM `selfcheckout` WHERE `email` LIKE `{}`""".format(email))
-    myuser=cursor.fetchall()
+# <<<<<<< new_branch
+    myuser=mycursor.fetchall()
+# =======
+#     myuser=cursor.fetchall()
+# >>>>>>> main
     session['user_id']=myuser[0][0]
     return redirect('/home')
 
