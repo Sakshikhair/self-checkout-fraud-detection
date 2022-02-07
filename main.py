@@ -5,8 +5,10 @@ import os
 app = Flask(__name__)
 app.secret_key=os.urandom(24)
 
+
 conn = mysql.connector.connect(host="Host_name", user="user", password="password", database="database")
 cursor = conn.cursor()
+
 
 @app.route("/")
 def login():
@@ -26,6 +28,7 @@ def home():
 #TO LOGIN
 @app.route("/login_validation", methods=['POST'])
 def login_validation():
+# <<<<<<< main
     lemail = request.form.get('login_email')
     lpassword = request.form.get('login_password')
     sql = "SELECT * from users WHERE email = %s AND password = %s"
@@ -53,7 +56,35 @@ def add_user():
     myuser=cursor.fetchall()
     session['user_id']=myuser[0][0]
     return redirect('/home')
+# =======
 
+#     email = request.form.get('email')
+#     password = request.form.get('password')
+#     mycursor.execute("""SELECT * from `selfcheckout` WHERE `email` LIKE '{}' AND `password` LIKE '{}'""".format(email, password))
+#     users = mycursor.fetchall()
+# >>>>>>> main
+
+    if len(users)>0:
+        session['user_id'] = users[0][0]
+        return redirect('/home')
+    else:
+        return redirect('/')
+
+#TO REGISTER
+@app.route("/add_user", methods=['POST'])
+def add_user():
+    name=request.form.get('uname')
+    email=request.form.get('uemail')
+    password=request.form.get('upassword')
+
+    mycursor.execute("""INSERT INTO `selfcheckout` (`user_id`, `name`, `email`, `password`) VALUES (NULL, `{}`, `{}`, `{}`).format(user_id, name, email, password)""")
+    conn.commit()
+    mycursor.execute("""SELECT * FROM `selfcheckout` WHERE `email` LIKE `{}`""".format(email))
+    myuser=mycursor.fetchall()
+    session['user_id']=myuser[0][0]
+    return redirect('/home')
+
+#logout
 @app.route("/logout")
 def logout():
     session.pop('user_id')
